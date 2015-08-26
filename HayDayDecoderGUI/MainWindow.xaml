@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:HayDayDecoderGUI"
         mc:Ignorable="d"
         Title="HayDayDecoderGUI" Height="400" Width="400"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Icon="favicon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
