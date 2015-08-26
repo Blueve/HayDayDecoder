@@ -9,11 +9,11 @@ using SevenZip;
 
 namespace HayDayDecoder
 {
-    class Decoder
+    public class Decoder
     {
         public Decoder() {}
 
-        public bool unzipDirectory(string dirPath)
+        public IEnumerable<string> unzipDirectory(string dirPath)
         {
             string[] fileList = Directory.GetFiles(dirPath);
             foreach(string file in fileList)
@@ -22,18 +22,21 @@ namespace HayDayDecoder
                 if (fileInfo.Extension != ".csv") continue;
 
                 // Unzip file
-                if(unzipFile(file))
+                string result;
+                var unzipStatus = unzipFile(file, out result);
+                
+                if (unzipStatus)
                 {
                     // Delete original file
                     File.Delete(file);
-
-                    System.Console.WriteLine("[Delete file]\t" + fileInfo.Name);
+                    result += "\n[Delete file]\t" + fileInfo.Name;
                 }
+                yield return result;
             }
-            return true;
+            yield break;
         }
 
-        public bool unzipFile(string filePath)
+        public bool unzipFile(string filePath, out string result)
         {
             FileInfo fileInfo = new FileInfo(filePath);
 
@@ -41,9 +44,9 @@ namespace HayDayDecoder
             fixFile(filePath, fileInfo);
 
             // Step 2. Unzip file
+            string outputPath = fileInfo.FullName.Replace(".csv", "_r.csv");
             try
             {
-                string outputPath = fileInfo.FullName.Replace(".csv", "_r.csv");
                 using (var input = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite))
                 {
                     var decoder = new LzmaDecodeStream(input);
@@ -61,11 +64,11 @@ namespace HayDayDecoder
             }
             catch(Exception)
             {
-                System.Console.WriteLine("[Broken file]\t" + fileInfo.Name);
+                result = "[Broken file]\t" + fileInfo.Name;
+                File.Delete(outputPath);
                 return false;
             }
-
-            System.Console.WriteLine("[Unzip file]\t" + fileInfo.Name);
+            result = "[Unzip file]\t" + fileInfo.Name;
             return true;
         }
 
