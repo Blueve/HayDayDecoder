@@ -1,7 +1,7 @@
 # HayDayDecoder
 A simple csv file decoder for Hay Day (a mobile game from supercell).
 
-You can decode the game file as a human-readable csv file.
+You can decode the game file to human-readable csv file.
 With that program, you can discover the inter parameter of the game for free, such as FUTURE EVENT CALENDAR, ITEM PICKUP PROBABILITY TABLE...
 
 ## Build Guide
